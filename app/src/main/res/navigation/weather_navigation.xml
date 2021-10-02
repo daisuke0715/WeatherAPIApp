@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/weather_navigation">
+    android:id="@+id/weather_navigation"
+    app:startDestination="@id/weatherMainFragment">
 
+    <fragment
+        android:id="@+id/weatherMainFragment"
+        android:name="com.nemo.sampleweatherapp.view.weather.WeatherMainFragment"
+        android:label="WeatherMainFragment" />
 </navigation>
