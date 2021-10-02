@@ -48,4 +48,9 @@ dependencies {
     def navVersion = "2.3.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    def koinVersionV2 = "2.2.3"
+    implementation "io.insert-koin:koin-androidx-scope:$koinVersionV2"
+    implementation "io.insert-koin:koin-androidx-viewmodel:$koinVersionV2"
+    implementation "io.insert-koin:koin-androidx-ext:$koinVersionV2"
 }
