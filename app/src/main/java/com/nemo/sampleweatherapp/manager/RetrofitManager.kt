@@ -4,6 +4,8 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitManager {
@@ -27,4 +29,11 @@ object RetrofitManager {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
         }
+
+    private val weatherUrl = "https://api.openweathermap.org"
+    val weatherRetrofit: Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .baseUrl(weatherUrl)
+        .client(httpBuilder.build())
+        .build()
 }
