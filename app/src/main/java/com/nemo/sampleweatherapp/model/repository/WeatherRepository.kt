@@ -23,7 +23,7 @@ class WeatherRepository {
                 emit(data.failure(Errors.failedGetData()))
             }
         } catch (e: Exception) {
-            println(e.message)
+            emit(data.failure(Errors.failed(e.message)))
         } finally {
             if(latestValue?.status == StateData.Companion.Status.LOADING) {
                 emit(data.failure(Errors.failedGetData()))
