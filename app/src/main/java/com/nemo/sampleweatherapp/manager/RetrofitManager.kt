@@ -30,7 +30,7 @@ object RetrofitManager {
                 .readTimeout(30, TimeUnit.SECONDS)
         }
 
-    private val weatherUrl = "https://api.openweathermap.org"
+    private const val weatherUrl = "https://api.openweathermap.org"
     val weatherRetrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(weatherUrl)
