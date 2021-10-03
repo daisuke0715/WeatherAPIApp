@@ -5,6 +5,8 @@
       <map>
         <entry key="app/src/main/res/layout/activity_weather.xml" value="0.3078125" />
         <entry key="app/src/main/res/layout/fragment_weather_main.xml" value="0.3078125" />
+        <entry key="app/src/main/res/layout/z_weather_list_cell_data.xml" value="0.25253292806484295" />
+        <entry key="app/src/main/res/layout/z_weather_list_date_cell.xml" value="0.25253292806484295" />
       </map>
     </option>
   </component>

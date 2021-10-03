@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nemo.sampleweatherapp.databinding.FragmentWeatherMainBinding
 import com.nemo.sampleweatherapp.databinding.ZWeatherListDateBinding
 import com.nemo.sampleweatherapp.databinding.ZWeatherListWeatherMainDataBinding
-import com.nemo.sampleweatherapp.viewModel.weather.WeatherMainViewModel.WeatherMainData
-import com.nemo.sampleweatherapp.viewModel.weather.WeatherMainViewModel.WeatherDate
-import com.nemo.sampleweatherapp.viewModel.weather.WeatherMainViewModel.WeatherItemModel
-import java.lang.IllegalArgumentException
+import com.nemo.sampleweatherapp.viewModel.weather.WeatherMainViewModel.*
 
 class WeatherMainFragment: Fragment() {
     private var _binding: FragmentWeatherMainBinding? = null
@@ -30,11 +27,23 @@ class WeatherMainFragment: Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adapter = initializeAdapter()
+        setUpRecycler(adapter)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    private fun initializeAdapter() = WeatherListAdapter()
+
+    private fun setUpRecycler(adapter: WeatherListAdapter) {
+        binding.weatherRecycler.adapter = adapter
+    }
 }
 
 class WeatherListAdapter : ListAdapter<WeatherItemModel, WeatherListViewHolder>(diffUtilCallback) {
@@ -55,7 +64,11 @@ class WeatherListAdapter : ListAdapter<WeatherItemModel, WeatherListViewHolder>(
     }
 
     override fun onBindViewHolder(holder: WeatherListViewHolder, position: Int) {
-
+        val item = currentList[position]
+        when(holder) {
+            is  WeatherDateViewHolder -> holder.bind(item as? WeatherDate ?: return)
+            is WeatherMainDataViewHolder -> holder.bind(item as? WeatherMainData ?: return)
+        }
     }
 
     private enum class ViewType {
@@ -73,11 +86,10 @@ private val diffUtilCallback = object : DiffUtil.ItemCallback<WeatherItemModel>(
     }
 }
 
-
 abstract class WeatherListViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 class WeatherDateViewHolder(
-    binding: ZWeatherListDateBinding
+    private val binding: ZWeatherListDateBinding
 ) : WeatherListViewHolder(binding.root) {
     companion object {
         fun create(parent: ViewGroup): WeatherDateViewHolder {
@@ -89,10 +101,14 @@ class WeatherDateViewHolder(
             return WeatherDateViewHolder(binding)
         }
     }
+
+    fun bind(item: WeatherDate) {
+        binding.dateTv.text = item.date
+    }
 }
 
 class WeatherMainDataViewHolder(
-    binding: ZWeatherListWeatherMainDataBinding
+    private val binding: ZWeatherListWeatherMainDataBinding
 ) : WeatherListViewHolder(binding.root) {
     companion object {
         fun create(parent: ViewGroup): WeatherMainDataViewHolder {
@@ -103,5 +119,11 @@ class WeatherMainDataViewHolder(
             )
             return WeatherMainDataViewHolder(binding)
         }
+    }
+
+    fun bind(item: WeatherMainData) {
+        binding.mainWeatherTv.text = item.mainWeather
+        binding.descriptionTv.text = item.description
+        binding.temperatureTv.text = "${item.tempMin} ~ ${item.tempMax}"
     }
 }
