@@ -1,4 +1,4 @@
-package com.nemo.sampleweatherapp.model
+package com.nemo.sampleweatherapp.model.apiModel
 
 import com.nemo.sampleweatherapp.BuildConfig
 import com.nemo.sampleweatherapp.model.entity.WeatherData
