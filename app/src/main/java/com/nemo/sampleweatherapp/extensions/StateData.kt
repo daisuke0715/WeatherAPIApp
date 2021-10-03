@@ -43,10 +43,14 @@ data class ErrorState(
 )
 
 enum class DisplayType {
-    ALERT
+    ALERT, NONE
 }
 
 object Errors {
+    fun failed(e: String? = null): ErrorState {
+        return ErrorState(e ?: "", DisplayType.NONE)
+    }
+
     fun failedGetData(): ErrorState {
         return ErrorState("データの取得に失敗しました。", DisplayType.ALERT)
     }
