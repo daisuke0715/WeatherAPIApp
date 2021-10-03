@@ -5,6 +5,7 @@ import com.nemo.sampleweatherapp.model.repository.WeatherRepository
 import kotlinx.coroutines.launch
 import com.nemo.sampleweatherapp.extensions.StateData.Companion.Status.SUCCESSFUL
 import com.nemo.sampleweatherapp.extensions.StateData.Companion.Status.ERROR
+import java.util.*
 
 class WeatherMainViewModel(
     private val weatherRepository: WeatherRepository
@@ -28,7 +29,7 @@ class WeatherMainViewModel(
 
                             val weather = hourlyWeather.weather.firstOrNull() ?: return@forEach
                             weatherItemModelList.add(
-                                WeatherCellData(
+                                WeatherMainData(
                                     tempMin = hourlyWeather.main.temp_min,
                                     tempMax = hourlyWeather.main.temp_max,
                                     mainWeather = weather.main,
@@ -50,16 +51,39 @@ class WeatherMainViewModel(
         return mediator
     }
 
-    abstract class WeatherItemModel
+    abstract class WeatherItemModel {
+        abstract fun isSameAs(itemModel: WeatherItemModel): Boolean
+        abstract fun hasSameContent(itemModel: WeatherItemModel): Boolean
+    }
 
     data class WeatherDate(
         val date: String
-    ) : WeatherItemModel()
+    ) : WeatherItemModel() {
+        override fun isSameAs(itemModel: WeatherItemModel): Boolean {
+            return itemModel is WeatherDate
+        }
 
-    data class WeatherCellData(
+        override fun hasSameContent(itemModel: WeatherItemModel): Boolean {
+            return (itemModel as? WeatherDate)?.date == date
+        }
+    }
+
+    data class WeatherMainData(
         val tempMin: Double,
         val tempMax: Double,
         val mainWeather: String,
         val description: String
-    ) : WeatherItemModel()
+    ) : WeatherItemModel() {
+        override fun isSameAs(itemModel: WeatherItemModel): Boolean {
+            return itemModel is WeatherMainData
+        }
+
+        override fun hasSameContent(itemModel: WeatherItemModel): Boolean {
+            val compareItem = itemModel as? WeatherMainData ?: return false
+            return (compareItem.tempMin == tempMin
+                    && compareItem.tempMax == tempMax
+                    && compareItem.mainWeather == mainWeather
+                    && compareItem.description == description)
+        }
+    }
 }
