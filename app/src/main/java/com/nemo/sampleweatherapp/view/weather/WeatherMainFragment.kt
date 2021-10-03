@@ -11,12 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nemo.sampleweatherapp.databinding.FragmentWeatherMainBinding
 import com.nemo.sampleweatherapp.databinding.ZWeatherListDateBinding
 import com.nemo.sampleweatherapp.databinding.ZWeatherListWeatherMainDataBinding
+import com.nemo.sampleweatherapp.viewModel.weather.WeatherMainViewModel
 import com.nemo.sampleweatherapp.viewModel.weather.WeatherMainViewModel.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherMainFragment: Fragment() {
     private var _binding: FragmentWeatherMainBinding? = null
     private val binding: FragmentWeatherMainBinding
         get() = _binding!!
+
+    private val viewModel: WeatherMainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +36,7 @@ class WeatherMainFragment: Fragment() {
 
         val adapter = initializeAdapter()
         setUpRecycler(adapter)
+        observeWeatherForecastLDAndSubmitList(adapter)
     }
 
     override fun onDestroyView() {
@@ -43,6 +48,13 @@ class WeatherMainFragment: Fragment() {
 
     private fun setUpRecycler(adapter: WeatherListAdapter) {
         binding.weatherRecycler.adapter = adapter
+    }
+
+    private fun observeWeatherForecastLDAndSubmitList(adapter: WeatherListAdapter) {
+        viewModel.weatherForecastLD.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+        viewModel.getFiveDayWeatherForecast().observe(viewLifecycleOwner) { }
     }
 }
 
